@@ -1,0 +1,24 @@
+import React from "react";
+import RenderControls from "./RenderControls";
+import RenderSettings from "./RenderSettings";
+import DictationCntr from "./DictationCntr";
+import LinearProgressCustom from "./LinearProgressCustom";
+
+function Dashboard(props) {
+  const { renderColumn, renderControl, renderForsage } = props;
+
+  return (
+    <div>
+      <LinearProgressCustom />
+      {renderForsage()}
+
+      {renderControl()}
+
+      <RenderSettings />
+      <DictationCntr />
+    </div>
+  );
+}
+
+export default Dashboard;
+// {renderColumn()}
