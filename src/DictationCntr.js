@@ -13,7 +13,7 @@ import {
 
 function DictationCntr() {
   const {
-    controls: { start, stop, end },
+    controls: { start, stop, end, queue },
     dictationState
   } = useControlsState();
 
@@ -58,13 +58,19 @@ function DictationCntr() {
 
   React.useEffect(() => {
     if (dictationState.begin) {
+      setNextArgs();
       onEvent({
         type: "dictation_begin",
         payload: { interval: dictationState.period }
       });
-      setNextArgs();
     }
   }, [dictationState.begin]);
+
+  // React.useEffect(() => {
+  //   if (queue.length > 0) {
+  //     setNextArgs();
+  //   }
+  // }, [queue]);
 
   React.useEffect(() => {
     if (dictationState.dictation && stop) {

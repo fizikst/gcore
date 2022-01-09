@@ -25,7 +25,31 @@ const initialState = {
     progress: false,
     end: false,
     args: [],
-    queue: []
+    queue: [],
+    increment: 0
+  },
+  countdownState: {
+    countdown: true,
+    begin: false,
+    progress: false,
+    end: false,
+    increment: 0
+  },
+  params: {
+    base: 10,
+    base_side: 1,
+    bound: 0,
+    digits_mode: 1,
+    first_int_available_numbers: 1,
+    interval: 1,
+    mode: 1,
+    numbers: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+    over: 1,
+    second_int_available_numbers: 1,
+    section: 5,
+    sign: 0,
+    steps: 3,
+    under: 1
   },
   request: {
     data: [],
@@ -42,7 +66,8 @@ const initialState = {
     end: false,
     period: 5,
     samples: []
-  }
+  },
+  num: 0
 };
 
 export const types = {
@@ -70,138 +95,314 @@ export const types = {
   ON_DICTATION_PROGRESS: "ON_DICTATION_PROGRESS",
   SET_NEXT_ARGS: "SET_NEXT_ARGS",
 
+  ON_COUNTDOWN_BEGIN: "ON_COUNTDOWN_BEGIN",
+  ON_COUNTDOWN_END: "ON_COUNTDOWN_END",
+  ON_COUNTDOWN_PROGRESS: "ON_COUNTDOWN_PROGRESS",
+  SET_COUNTDOWN_INCREMENT: "SET_COUNTDOWN_INCREMENT",
+  SET_COUNTDOWN: "SET_COUNTDOWN",
+
   // // SET_PARAMS: "SET_PARAMS",
   SET_CONTROLS: "SET_CONTROLS",
-  TOGGLE_DICTATION: "TOGGLE_DICTATION"
+  SET_DICTATION: "SET_DICTATION",
+  TOGGLE_DICTATION: "TOGGLE_DICTATION",
+
+  SET_PARAMS: "SET_PARAMS",
+
+  SET_NUM: "SET_NUM"
 };
 
 export function useControlsActions() {
   const { dispatch } = React.useContext(ControlsActionsContext);
 
-  function onChange(key, value) {
-    dispatch({
-      type: types.ON_CHANGE,
-      meta: key,
-      payload: value
-    });
-  }
+  // function onChange(key, value) {
+  //   dispatch({
+  //     type: types.ON_CHANGE,
+  //     meta: key,
+  //     payload: value
+  //   });
+  // }
 
-  function setRequest(payload) {
-    dispatch({
-      type: types.SET_REQUEST,
-      payload
-    });
-  }
+  // function setRequest(payload) {
+  //   dispatch({
+  //     type: types.SET_REQUEST,
+  //     payload
+  //   });
+  // }
 
-  function setControls(payload) {
-    dispatch({
-      type: types.SET_CONTROLS,
-      payload
-    });
-  }
-  function onStart() {
-    dispatch({
-      type: types.ON_START
-    });
-  }
-  function onStop() {
-    dispatch({
-      type: types.ON_STOP
-    });
-  }
-  function onCheck() {
-    dispatch({
-      type: types.ON_CHECK
-    });
-  }
+  // function setControls(payload) {
+  //   dispatch({
+  //     type: types.SET_CONTROLS,
+  //     payload
+  //   });
+  // }
+  // function onStart() {
+  //   dispatch({
+  //     type: types.ON_START
+  //   });
+  // }
+  // function onStop() {
+  //   dispatch({
+  //     type: types.ON_STOP
+  //   });
+  // }
+  // function onCheck() {
+  //   dispatch({
+  //     type: types.ON_CHECK
+  //   });
+  // }
 
-  function onEnd() {
-    dispatch({
-      type: types.ON_END
-    });
-  }
+  // function onEnd() {
+  //   dispatch({
+  //     type: types.ON_END
+  //   });
+  // }
 
-  function onBegin() {
-    dispatch({
-      type: types.ON_BEGIN
-    });
-  }
-  function onProgress() {
-    dispatch({
-      type: types.ON_PROGRESS
-    });
-  }
+  // function onBegin() {
+  //   dispatch({
+  //     type: types.ON_BEGIN
+  //   });
+  // }
+  // function onProgress() {
+  //   dispatch({
+  //     type: types.ON_PROGRESS
+  //   });
+  // }
 
-  function onToggle(key) {
-    dispatch({
-      type: types.ON_TOGGLE,
-      meta: key
-    });
-  }
+  // function onToggle(key) {
+  //   dispatch({
+  //     type: types.ON_TOGGLE,
+  //     meta: key
+  //   });
+  // }
 
-  function onUpdate(payload) {
-    dispatch({
-      type: types.ON_UPDATE,
-      payload
-    });
-  }
+  // function onUpdate(payload) {
+  //   dispatch({
+  //     type: types.ON_UPDATE,
+  //     payload
+  //   });
+  // }
 
-  function toggleControls(key) {
-    dispatch({
-      type: types.TOGGLE_CONTROLS,
-      meta: key
-    });
-  }
+  // function toggleControls(key) {
+  //   dispatch({
+  //     type: types.TOGGLE_CONTROLS,
+  //     meta: key
+  //   });
+  // }
 
-  function toggleDictation(key) {
-    dispatch({
-      type: types.TOGGLE_DICTATION,
-      meta: key
-    });
-  }
+  // function toggleDictation(key) {
+  //   dispatch({
+  //     type: types.TOGGLE_DICTATION,
+  //     meta: key
+  //   });
+  // }
 
-  function onDictationBegin() {
-    dispatch({
-      type: types.ON_DICTATION_BEGIN
-    });
-  }
-  function onDictationEnd() {
-    dispatch({
-      type: types.ON_DICTATION_END
-    });
-  }
+  // function onDictationBegin() {
+  //   dispatch({
+  //     type: types.ON_DICTATION_BEGIN
+  //   });
+  // }
+  // function onDictationEnd() {
+  //   dispatch({
+  //     type: types.ON_DICTATION_END
+  //   });
+  // }
 
-  function setNextArgs() {
-    dispatch({
-      type: types.SET_NEXT_ARGS
-    });
-  }
+  // function setNextArgs() {
+  //   dispatch({
+  //     type: types.SET_NEXT_ARGS
+  //   });
+  // }
 
-  return {
-    onChange,
-    onStart,
-    onStop,
-    onCheck,
-    onEnd,
-    onBegin,
-    onProgress,
-    onToggle,
-    onUpdate,
-    setRequest,
-    setControls,
-    toggleDictation,
-    toggleControls,
-    onDictationBegin,
-    onDictationEnd,
-    setNextArgs
-  };
+  // useMemo(() => ({
+  //   setInput: (value) => {
+  //     dispatch({
+  //       type: 'SET_INPUT',
+  //       payload: value
+  //     })
+  //   },
+  //   addTodo: ({ id, content }) => {
+  //     dispatch({
+  //       type: 'ADD_TODO',
+  //       payload: { id, content }
+  //     })
+  //   }
+  // }), []);
+  // function onChange(key, value) {
+  //   dispatch({
+  //     type: types.ON_CHANGE,
+  //     meta: key,
+  //     payload: value
+  //   });
+  // }
+  const memoizedActions = React.useMemo(
+    () => ({
+      onChange: (key, value) => {
+        dispatch({
+          type: types.ON_CHANGE,
+          meta: key,
+          payload: value
+        });
+      },
+      setRequest: (payload) => {
+        dispatch({
+          type: types.SET_REQUEST,
+          payload
+        });
+      },
+
+      setControls: (payload) => {
+        dispatch({
+          type: types.SET_CONTROLS,
+          payload
+        });
+      },
+
+      setParams: (payload) => {
+        dispatch({
+          type: types.SET_PARAMS,
+          payload
+        });
+      },
+
+      setDictation: (payload) => {
+        dispatch({
+          type: types.SET_DICTATION,
+          payload
+        });
+      },
+      onStart: () => {
+        dispatch({
+          type: types.ON_START
+        });
+      },
+      onStop: () => {
+        dispatch({
+          type: types.ON_STOP
+        });
+      },
+      onCheck: () => {
+        dispatch({
+          type: types.ON_CHECK
+        });
+      },
+      onEnd: () => {
+        dispatch({
+          type: types.ON_END
+        });
+      },
+      onBegin: () => {
+        dispatch({
+          type: types.ON_BEGIN
+        });
+      },
+      onProgress: () => {
+        dispatch({
+          type: types.ON_PROGRESS
+        });
+      },
+      onToggle: (key) => {
+        dispatch({
+          type: types.ON_TOGGLE,
+          meta: key
+        });
+      },
+      onUpdate: (payload) => {
+        dispatch({
+          type: types.ON_UPDATE,
+          payload
+        });
+      },
+      toggleControls: (key) => {
+        dispatch({
+          type: types.TOGGLE_CONTROLS,
+          meta: key
+        });
+      },
+      toggleDictation: (key) => {
+        dispatch({
+          type: types.TOGGLE_DICTATION,
+          meta: key
+        });
+      },
+      onDictationBegin: () => {
+        dispatch({
+          type: types.ON_DICTATION_BEGIN
+        });
+      },
+      onDictationEnd: () => {
+        dispatch({
+          type: types.ON_DICTATION_END
+        });
+      },
+
+      setCountdown: (payload) => {
+        dispatch({
+          type: types.SET_COUNTDOWN,
+          payload
+        });
+      },
+      onCountdownBegin: () => {
+        dispatch({
+          type: types.ON_COUNTDOWN_BEGIN
+        });
+      },
+      onCountdownEnd: () => {
+        dispatch({
+          type: types.ON_COUNTDOWN_END
+        });
+      },
+      onCountdownProgress: () => {
+        dispatch({
+          type: types.ON_COUNTDOWN_PROGRESS
+        });
+      },
+      setCountdownIncrement: () => {
+        dispatch({
+          type: types.SET_COUNTDOWN_INCREMENT
+        });
+      },
+      setNextArgs: () => {
+        dispatch({
+          type: types.SET_NEXT_ARGS
+        });
+      }
+    }),
+    [dispatch]
+  );
+
+  return memoizedActions;
+  // return {
+  // onChange,
+  // onStart,
+  // onStop,
+  // onCheck,
+  // onEnd,
+  // onBegin,
+  // onProgress,
+  // onToggle,
+  // onUpdate,
+  // setRequest,
+  // setControls,
+  // toggleDictation,
+  // toggleControls,
+  // onDictationBegin,
+  // onDictationEnd,
+  // setNextArgs
+  // };
 }
 
 function reducer(state, action) {
   const {
-    dictationState: { dictation }
+    dictationState: { dictation, amount },
+    num
   } = state;
   switch (action.type) {
+    case types.SET_NUM:
+      return {
+        ...state,
+        num: action.payload
+      };
+
     case types.ON_CHANGE:
       return {
         ...state,
@@ -261,9 +462,15 @@ function reducer(state, action) {
     case types.ON_CHECK:
       return {
         ...state,
-        start: state.repeat,
-        stop: false,
-        check: true
+        controls: {
+          ...state.controls,
+          ...{
+            start: state.controls.repeat,
+            stop: false,
+            check: true,
+            increment: state.controls.increment + 1
+          }
+        }
       };
     case types.ON_BEGIN:
       return {
@@ -307,12 +514,18 @@ function reducer(state, action) {
         ...action.payload
       };
     case types.SET_REQUEST:
+      const startIndex = dictation ? amount : 1;
+      const nextArgs = action.payload.data.slice(
+        num * startIndex,
+        num * startIndex + startIndex
+      );
+
       return {
         ...state,
         controls: {
           ...state.controls,
-          args: dictation ? [] : action.payload.data,
-          queue: dictation ? action.payload.data : []
+          args: dictation ? [] : nextArgs[0],
+          queue: dictation ? nextArgs : []
         },
         request: { ...state.request, ...action.payload }
       };
@@ -322,14 +535,18 @@ function reducer(state, action) {
         controls: { ...state.controls, ...action.payload }
       };
 
-    case types.TOGGLE_DICTATION:
+    case types.SET_PARAMS:
+      return {
+        ...state,
+        params: { ...state.params, ...action.payload }
+      };
+
+    case types.SET_DICTATION:
       return {
         ...state,
         dictationState: {
           ...state.dictationState,
-          ...{
-            [action.meta]: !state.dictationState[action.meta]
-          }
+          ...action.payload
         }
       };
 
@@ -356,6 +573,76 @@ function reducer(state, action) {
             begin: false,
             progress: false,
             end: true
+          }
+        }
+      };
+
+    case types.SET_COUNTDOWN:
+      return {
+        ...state,
+        countdownState: {
+          ...state.countdownState,
+          ...action.payload
+        }
+      };
+
+    case types.ON_COUNTDOWN_BEGIN:
+      return {
+        ...state,
+        countdownState: {
+          ...state.countdownState,
+          ...{
+            begin: true,
+            progress: false,
+            end: false
+          }
+        }
+      };
+
+    case types.ON_COUNTDOWN_PROGRESS:
+      return {
+        ...state,
+        countdownState: {
+          ...state.countdownState,
+          ...{
+            progress: true
+          }
+        }
+      };
+
+    case types.ON_COUNTDOWN_END:
+      return {
+        ...state,
+        countdownState: {
+          ...state.countdownState,
+          ...{
+            begin: false,
+            progress: false,
+            end: true,
+            increment: 0
+          }
+        },
+        controls: {
+          ...state.controls,
+          ...{
+            start: true,
+            stop: false,
+            check: false,
+            value: "",
+            begin: false,
+            progress: false,
+            end: false
+          }
+        }
+      };
+
+    case types.SET_COUNTDOWN_INCREMENT:
+      return {
+        ...state,
+        countdownState: {
+          ...state.countdownState,
+          ...{
+            increment: state.countdownState.increment + 1
           }
         }
       };
@@ -404,7 +691,7 @@ function reducer(state, action) {
     //       };
     //     }
     default:
-      return new Error();
+      return state;
   }
 }
 
@@ -412,6 +699,7 @@ export function ControlsContextProvider(props) {
   const {
     state: globalState,
     children,
+    num,
     args,
     controls,
     room,
@@ -428,12 +716,47 @@ export function ControlsContextProvider(props) {
     "CONTROLS"
   );
 
+  // useEffect(() => {
+  //   dispatch({
+  //     type: types.ON_UPDATE,
+  //     payload: globalState
+  //   });
+  // }, [globalState]);
+  // TODO обдумать мб есть лучший вариант
   useEffect(() => {
     dispatch({
       type: types.SET_CONTROLS,
       payload: globalState.controls
     });
-  }, [globalState]);
+  }, [globalState.controls]);
+
+  useEffect(() => {
+    dispatch({
+      type: types.SET_COUNTDOWN,
+      payload: globalState.countdownState
+    });
+  }, [globalState.countdownState]);
+
+  useEffect(() => {
+    dispatch({
+      type: types.SET_DICTATION,
+      payload: globalState.dictationState
+    });
+  }, [globalState.dictationState]);
+
+  useEffect(() => {
+    dispatch({
+      type: types.SET_REQUEST,
+      payload: globalState.request
+    });
+  }, [globalState.request]);
+
+  useEffect(() => {
+    dispatch({
+      type: types.SET_NUM,
+      payload: num
+    });
+  }, [num]);
 
   // useEffect(() => {
   //   dispatch({
@@ -468,7 +791,7 @@ export function ControlsContextProvider(props) {
     }),
     []
   );
-  console.log("ControlsContextProvider", { globalState });
+  console.log("ControlsContextProvider", { state, globalState, num });
 
   return (
     <ControlsStateContext.Provider value={state}>
